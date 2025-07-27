@@ -43,6 +43,12 @@ class tutor:
 
                 print(e)
 
+        #estructura de tabla grande
+
+        etiqueta_tabla=tk.Label(self.ventana,text="Practicas")
+        etiqueta_tabla.pack()
+
+
         columnas = ("ID", "Nombre", "Empresa", "Horas", "Feha", "Descripción","Estado")
         tree = ttk.Treeview(self.ventana, columns=columnas, show="headings")
         for col in columnas:
@@ -50,4 +56,12 @@ class tutor:
         cargar_datos()
         tree.pack()
 
-       
+       #boton para volver
+
+        def volver():
+            self.conexion.close()
+            self.vent.deiconify()
+            self.ventana.destroy()
+            
+        volverb=tk.Button(self.ventana,text="volver",command=volver)
+        volverb.pack()
