@@ -1,15 +1,27 @@
 import tkinter as tk
 import  mysql.connector as msqlc
 from tkinter import messagebox
+from tkinter import ttk
+
+
 
 class alumno():
 
     def __init__(self,vent):
         
         self.ventana=tk.Toplevel()
-        self.ventana.geometry("500x300")
+        self.ventana.geometry("1000x500")
         self.ventana.title("alumno")
         self.vent=vent
+        self.conexion=msqlc.connect(
+
+                    host="maglev.proxy.rlwy.net",
+                    port= 59637,  
+                    user="root",
+                    password="XTYDQGTzDpJjBcGyChGTybLHiJbfFUac",
+                    database="railway"
+
+                )
 
     def campos(self):
 
@@ -34,10 +46,25 @@ class alumno():
         etiqueta_empresa=tk.Label(self.ventana,text="EMPRESA")
         etiqueta_empresa.pack()
 
-        campo_empresa=tk.Entry(self.ventana)
-        campo_empresa.pack()
+        def datos_empresas():
+            cursor = self.conexion.cursor()
+            cursor.execute("SELECT nombre FROM empresas")
+            resultados = [fila[0] for fila in cursor.fetchall()]
+            cursor.close()
+            return resultados
+        
 
-         #campo horas
+        combo_empresas = ttk.Combobox(self.ventana, width=40)
+        combo_empresas.pack()
+
+        opciones = datos_empresas()
+        print(opciones)
+        combo_empresas['values'] = opciones
+
+
+
+
+                #campo horas
 
         etiqueta_horas=tk.Label(self.ventana,text="HORAS REALIZADAS(INT)")
         etiqueta_horas.pack()
@@ -58,30 +85,24 @@ class alumno():
         def mandar():
             nombre=campo_nombre.get()
             fecha=campo_fecha.get()
-            empresa=campo_empresa.get()
+            empresa=combo_empresas.get()
             hora=campo_horas.get()
             descrip=campo_descrip.get()
 
             try:
 
-                conexion=msqlc.connect(
+                
 
-                    host="maglev.proxy.rlwy.net",
-                    port= 59637,  
-                    user="root",
-                    password="XTYDQGTzDpJjBcGyChGTybLHiJbfFUac",
-                    database="railway"
-
-                )
-
-                cursor=conexion.cursor()
-                querry="""INSERT INTO estudiante(NOMBRE,EMPRESA,FECHA,HORAS,DESCRIPCION)
+                cursor=self.conexion.cursor()
+                querry="""INSERT INTO practicas(NOMBRE,EMPRESA,FECHA,HORAS,DESCRIPCION)
                     VALUES (%s, %s, %s, %s, %s)
                 """
 
                 datos=(nombre,empresa,fecha,hora,descrip)
                 cursor.execute(querry,datos)
-                conexion.commit()
+                self.conexion.commit()
+
+                messagebox.showinfo("exito","Datos subidos correctamente")
 
 
             except msqlc.Error as e :
@@ -96,7 +117,7 @@ class alumno():
 
 
         def volver():
-
+            self.conexion.close()
             self.vent.deiconify()
             self.ventana.destroy()
             

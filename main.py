@@ -1,4 +1,5 @@
 from alumno import alumno as al
+from tutor import tutor as tt
 import tkinter as tk
 
 class login:
@@ -19,7 +20,9 @@ class login:
             self.ventana.withdraw()
 
         def opening2():
-            pass
+            t=tt(self.ventana)
+            t.tablas()
+            self.ventana.withdraw()
 
         def opening3():
           pass 
