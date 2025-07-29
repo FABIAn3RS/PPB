@@ -130,6 +130,7 @@ class alumno():
                 messagebox.showerror("error",e)
 
             self.ventana.destroy()
+            self.vent.deiconify()
 
 
         guardar=tk.Button(self.ventana,text="guardar",command=mandar)
@@ -147,17 +148,3 @@ class alumno():
        
     
 
-
-if __name__=="main":
-
-    al=alumno()
-
-
-"""""  ventana1=tk.Tk()
-
-a=alumno()
-a.campos()
-ventana1.mainloop()
- 
-"""""
- 

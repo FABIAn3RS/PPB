@@ -1,6 +1,7 @@
 import tkinter as tk
 import  mysql.connector as msqlc
 from tkinter import ttk
+from buscador import buscador
 
 
 
@@ -124,6 +125,16 @@ class tutor:
         boton_aprobar=tk.Button(self.ventana,text="Aprobar Practica",command=aprobar_practica_y_actualizar)
         boton_aprobar.pack()
 
+        boton_buscar_por_empresa = tk.Button(self.ventana, text="BUSCAR POR EMPRESA", command=lambda: buscador(self.ventana).buscar_empresa())
+        boton_buscar_por_empresa.pack(side=tk.BOTTOM, anchor=tk.W)
+
+        boton_buscar_por_estudiante = tk.Button(self.ventana, text="BUSCAR POR ESTUDIANTE", command=lambda: buscador(self.ventana).buscar_estudiante())
+        boton_buscar_por_estudiante.pack(side=tk.BOTTOM, anchor=tk.W)
+
+        boton_buscar_por_fecha = tk.Button(self.ventana, text="BUSCAR POR FECHA", command=lambda: buscador(self.ventana).buscar_fecha())
+        boton_buscar_por_fecha.pack(side=tk.BOTTOM, anchor=tk.W)
+
+       
 
 
        #boton para volver

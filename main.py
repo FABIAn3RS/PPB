@@ -1,5 +1,6 @@
 from alumno import alumno as al
 from tutor import tutor as tt
+from coordinador import cordinador as cordinador   
 import tkinter as tk
 
 class login:
@@ -25,7 +26,9 @@ class login:
             self.ventana.withdraw()
 
         def opening3():
-          pass 
+            c=cordinador(self.ventana)
+            c.campos()
+            self.ventana.withdraw()
             
              
         titulo=tk.Label(self.ventana,text="SELECCIONE USUARIO",height=10)
