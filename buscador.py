@@ -49,7 +49,7 @@ class buscador:
         boton_buscar = tk.Button(self.ventana, text="Buscar", command=buscar_por_empresas)
         boton_buscar.pack()
 
-        columnas = ("ID", "Nombre", "Empresa", "Horas", "Feha", "Descripción", "Tutor")
+        columnas = ("ID", "Nombre", "Empresa", "Horas", "Fecha", "Descripción", "Estado", "Tutor")
         tree_empresas = ttk.Treeview(self.ventana, columns=columnas, show="headings")
         for col in columnas:
             tree_empresas.heading(col, text=col)
@@ -97,7 +97,7 @@ class buscador:
         boton_buscar = tk.Button(self.ventana, text="Buscar", command=buscar_por_estudiantes)
         boton_buscar.pack()
 
-        columnas = ("ID", "Nombre", "Empresa", "Horas", "Feha", "Descripción", "Tutor")
+        columnas = ("ID", "Nombre", "Empresa", "Horas", "Fecha", "Descripción", "Estado", "Tutor")
         tree_estudiantes = ttk.Treeview(self.ventana, columns=columnas, show="headings")
         for col in columnas:
             tree_estudiantes.heading(col, text=col)
@@ -142,7 +142,7 @@ class buscador:
         boton_buscar = tk.Button(self.ventana, text="Buscar", command=buscar_por_fecha)
         boton_buscar.pack()
 
-        columnas = ("ID", "Nombre", "Empresa", "Horas", "Fecha", "Descripción", "Tutor")
+        columnas = ("ID", "Nombre", "Empresa", "Horas", "Fecha", "Descripción", "Estado", "Tutor")
         tree_fecha = ttk.Treeview(self.ventana, columns=columnas, show="headings")
         for col in columnas:
             tree_fecha.heading(col, text=col)
