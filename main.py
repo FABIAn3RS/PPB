@@ -28,6 +28,8 @@ class login:
           pass 
             
              
+        titulo=tk.Label(self.ventana,text="SELECCIONE USUARIO",height=10)
+        titulo.pack()
 
         boton_estudiantes=tk.Button(self.ventana,text="ALUMNO",width=50,height=10,command=opening1)
         boton_estudiantes.pack()

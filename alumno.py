@@ -10,8 +10,8 @@ class alumno():
     def __init__(self,vent):
         
         self.ventana=tk.Toplevel()
-        self.ventana.geometry("1000x500")
-        self.ventana.title("alumno")
+        self.ventana.geometry("300x600")
+        self.ventana.title("Formulario de Practicas")
         self.vent=vent
         self.conexion=msqlc.connect(
 
@@ -64,7 +64,7 @@ class alumno():
 
 
 
-                #campo horas
+        #campo horas
 
         etiqueta_horas=tk.Label(self.ventana,text="HORAS REALIZADAS(INT)")
         etiqueta_horas.pack()
@@ -80,6 +80,25 @@ class alumno():
         campo_descrip=tk.Entry(self.ventana)
         campo_descrip.pack()
 
+        #campo tutor
+
+        etiqueta_tutor=tk.Label(self.ventana,text="TUTOR")
+        etiqueta_tutor.pack()
+       
+        def datos_tutores():
+            cursor = self.conexion.cursor()
+            cursor.execute("SELECT NOMBRE FROM tutores")
+            resultados = [fila[0] for fila in cursor.fetchall()]
+            cursor.close()
+            return resultados
+        
+        campo_tutor = ttk.Combobox(self.ventana, width=40)
+        campo_tutor.pack()
+
+        opciones = datos_tutores()
+        print(opciones)
+        campo_tutor['values'] = opciones
+
         #boton
 
         def mandar():
@@ -88,17 +107,18 @@ class alumno():
             empresa=combo_empresas.get()
             hora=campo_horas.get()
             descrip=campo_descrip.get()
+            tutor=campo_tutor.get()
 
             try:
 
                 
 
                 cursor=self.conexion.cursor()
-                querry="""INSERT INTO practicas(NOMBRE,EMPRESA,FECHA,HORAS,DESCRIPCION)
-                    VALUES (%s, %s, %s, %s, %s)
+                querry="""INSERT INTO practicas(NOMBRE,EMPRESA,FECHA,HORAS,DESCRIPCION,TUTOR)
+                    VALUES (%s, %s, %s, %s, %s, %s)
                 """
 
-                datos=(nombre,empresa,fecha,hora,descrip)
+                datos=(nombre,empresa,fecha,hora,descrip,tutor)
                 cursor.execute(querry,datos)
                 self.conexion.commit()
 
@@ -109,7 +129,7 @@ class alumno():
 
                 messagebox.showerror("error",e)
 
-               
+            self.ventana.destroy()
 
 
         guardar=tk.Button(self.ventana,text="guardar",command=mandar)
