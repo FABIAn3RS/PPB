@@ -2,12 +2,13 @@ import tkinter as tk
 import  mysql.connector as msqlc
 from tkinter import ttk
 from buscador import buscador
+from reporte import reportes
 
 class cordinador:
      def __init__(self,vent):
 
         self.ventana=tk.Toplevel()
-        self.ventana.geometry("1600x900")
+        self.ventana.geometry("1600x1000")
         self.ventana.title("tutor")
         self.vent=vent
         self.conexion=msqlc.connect(
@@ -16,25 +17,24 @@ class cordinador:
                     port= 59637,  
                     user="root",
                     password="XTYDQGTzDpJjBcGyChGTybLHiJbfFUac",
-                    database="railway"
+                    database="new_schema"
 
                 )
 
      def campos(self):
             
-            #eTIQUETA EMPRESAS
-
-            etiqueta_nombre=tk.Label(self.ventana,text="EMPRESAS")
-            etiqueta_nombre.pack()
+           
 
             #FUNCION PARA CARGAR DATOS DE EMPRESAS
 
-            def cargar_Datos_empresas():
+            def cargar_Datos_empresas():    
+
+                tree_empresas.delete(*tree_empresas.get_children())
 
                 try:  
 
                     cursor=self.conexion.cursor()
-                    cursor.execute("SELECT*FROM empresas")
+                    cursor.execute("SELECT*FROM EMPRESAS")
                     datos=cursor.fetchall()
                     
                     for fila in datos:
@@ -48,13 +48,13 @@ class cordinador:
                 cursor.close()
 
 
-                selected_item = tree_empresas.selection()
-                if selected_item:
-                    tree_empresas.delete(selected_item)
-                    # Aquí podrías agregar código para eliminar la empresa de la base de datos si es necesario
+                
 
             #FUNCIONA PARA AGREGAR EMPRESAS
             def agregar_empresa():
+
+                
+
                 empresa_inerfaz = tk.Toplevel(self.ventana)
                 empresa_inerfaz.geometry("300x200")
                 empresa_inerfaz.title("Agregar Empresa")
@@ -82,9 +82,11 @@ class cordinador:
                     tipo = campo_tipo.get()
                     descripcion = campo_descripcion.get()
 
+
+
                     try:
                         cursor = self.conexion.cursor()
-                        querry = """INSERT INTO empresas(nombre, tipo, descripcion)
+                        querry = """INSERT INTO EMPRESAS(nombre, tipo, descripcion)
                                     VALUES (%s, %s, %s)"""
                         datos = (nombre, tipo, descripcion)
                         cursor.execute(querry, datos)
@@ -100,8 +102,12 @@ class cordinador:
 
 
             def cargar_datos_tutores():
+
+                tree_tutores.delete(*tree_tutores.get_children())
+
+
                 cursor = self.conexion.cursor()
-                cursor.execute("SELECT * FROM tutores")
+                cursor.execute("SELECT * FROM TUTORES")
                 datos = cursor.fetchall()
                 for fila in datos:
                     tree_tutores.insert("", tk.END, values=fila)
@@ -109,6 +115,8 @@ class cordinador:
 
 
             def agregar_tutor():
+ 
+
                 tutor_inerfaz = tk.Toplevel(self.ventana)
                 tutor_inerfaz.geometry("300x200")
                 tutor_inerfaz.title("Agregar Tutor")
@@ -138,7 +146,7 @@ class cordinador:
 
                     try:
                         cursor = self.conexion.cursor()
-                        querry = """INSERT INTO tutores(nombre, correo, telefono)
+                        querry = """INSERT INTO TUTORES(nombre, correo, telefono)
                                     VALUES (%s, %s, %s)"""
                         datos = (nombre, correo, telefono)
                         cursor.execute(querry, datos)
@@ -152,6 +160,72 @@ class cordinador:
                 boton_guardar = tk.Button(tutor_inerfaz, text="Guardar", command=guardar_tutor)
                 boton_guardar.pack()
 
+
+            def cargar_datos_estudiantes():
+
+
+                tree_estudiantes.delete(*tree_estudiantes.get_children())
+
+
+                cursor = self.conexion.cursor()
+                cursor.execute("SELECT * FROM ESTUDIANTES")
+                datos = cursor.fetchall()
+                for fila in datos:
+                    tree_estudiantes.insert("", tk.END, values=fila)
+                cursor.close()
+
+
+            def agregar_estudiante():
+
+                estudiante_inerfaz = tk.Toplevel(self.ventana)
+                estudiante_inerfaz.geometry("300x200")
+                estudiante_inerfaz.title("Agregar Estudiante")
+
+                etiqueta_nombre = tk.Label(estudiante_inerfaz, text="Nombre del Estudiante:")
+                etiqueta_nombre.pack()
+
+                campo_nombre = tk.Entry(estudiante_inerfaz)
+                campo_nombre.pack()
+
+                etiqueta_correo = tk.Label(estudiante_inerfaz, text="Correo del Estudiante:")
+                etiqueta_correo.pack()
+
+                campo_carrera = tk.Entry(estudiante_inerfaz)
+                campo_carrera.pack()
+
+                etiqueta_nacimiento = tk.Label(estudiante_inerfaz, text="Fecha de Nacimiento:")
+                etiqueta_nacimiento.pack()
+
+                campo_nacimiento = tk.Entry(estudiante_inerfaz)
+                campo_nacimiento.pack()
+
+                def guardar_estudiante():
+                    nombre = campo_nombre.get()
+                    carrera = campo_carrera .get()
+                    nacimiento = campo_nacimiento.get()
+
+                    try:
+                        cursor = self.conexion.cursor()
+                        querry = """INSERT INTO ESTUDIANTES(nombre, carrera, nacimiento)
+                                    VALUES (%s, %s, %s)"""
+                        datos = (nombre, carrera, nacimiento)
+                        cursor.execute(querry, datos)
+                        self.conexion.commit()
+                        estudiante_inerfaz.destroy()
+                        cargar_datos_estudiantes()
+                        print("Estudiante agregado correctamente.")
+                    except msqlc.Error as e:
+                        print(f"Error al agregar el estudiante: {e}")
+
+                boton_guardar = tk.Button(estudiante_inerfaz, text="Guardar", command=guardar_estudiante)
+                boton_guardar.pack()
+
+           
+           #eTIQUETA EMPRESAS
+
+            etiqueta_nombre=tk.Label(self.ventana,text="EMPRESAS")
+            etiqueta_nombre.pack()
+           
             #TABLA EMPRESAS
 
             columnas = ("ID","NOMBRE","Tipo","Descripcion")
@@ -161,7 +235,7 @@ class cordinador:
             cargar_Datos_empresas()
             tree_empresas.pack()
 
-
+            # BOTON PARA AGREGAR EMPRESAS
 
             boton_agregar_empresa = tk.Button(self.ventana, text="AGREGAR EMPRESA", command=agregar_empresa)
             boton_agregar_empresa.pack()
@@ -187,6 +261,30 @@ class cordinador:
             boton_agregar_tutor.pack()
 
 
+
+
+
+
+            #ETIQUETA ESTUDIANTES
+
+            etiqueta_estudiantes = tk.Label(self.ventana, text="Estudiantes")
+            etiqueta_estudiantes.pack()
+
+            #TABLA ESTUDIANTES
+            columnas_estudiantes = ("ID", "Nombre", "Correo", "Nacimiento")
+            tree_estudiantes = ttk.Treeview(self.ventana, columns=columnas_estudiantes, show="headings")
+            for col in columnas_estudiantes:
+                tree_estudiantes.heading(col, text=col)
+            cargar_datos_estudiantes()
+            tree_estudiantes.pack()
+
+            # BOTON PARA AGREGAR ESTUDIANTES
+            boton_agregar_estudiante = tk.Button(self.ventana, text="AGREGAR ESTUDIANTE", command=agregar_estudiante)
+            boton_agregar_estudiante.pack()
+
+            #BOTON PARA BUSQUEDA DE PRACTICAS
+
+
             boton_buscar_por_empresa = tk.Button(self.ventana, text="BUSCAR POR EMPRESA", command=lambda: buscador(self.ventana).buscar_empresa())
             boton_buscar_por_empresa.pack(side=tk.BOTTOM, anchor=tk.W)
 
@@ -195,6 +293,11 @@ class cordinador:
 
             boton_buscar_por_fecha = tk.Button(self.ventana, text="BUSCAR POR FECHA", command=lambda: buscador(self.ventana).buscar_fecha())
             boton_buscar_por_fecha.pack(side=tk.BOTTOM, anchor=tk.W)
+
+            boton_generar_reporte = tk.Button(self.ventana, text="GENERAR REPORTE", command=lambda: reportes(self.ventana).generar_reporte())
+            boton_generar_reporte.pack(side=tk.BOTTOM, anchor=tk.W)
+
+
 
             #boton para volver
 

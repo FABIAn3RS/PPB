@@ -15,7 +15,7 @@ class buscador:
             port=59637,
             user="root",
             password="XTYDQGTzDpJjBcGyChGTybLHiJbfFUac",
-            database="railway"
+            database="new_schema"
         )
 
     def buscar_empresa(self):
@@ -35,7 +35,7 @@ class buscador:
 
             empresa = campo_buscar.get()
             cursor = self.conexion.cursor()
-            query = "SELECT * FROM practicas WHERE EMPRESA LIKE %s"
+            query = "SELECT * FROM  PracticasGLOBAL_con_estado  WHERE empresa LIKE %s"
             datos = (empresa,)
             cursor.execute(query, datos)
             resultados = cursor.fetchall()
@@ -81,7 +81,7 @@ class buscador:
 
             nombre = campo_buscar.get()
             cursor = self.conexion.cursor()
-            query = "SELECT * FROM practicas WHERE NOMBRE LIKE %s"
+            query = "SELECT * FROM PracticasGLOBAL_con_estado WHERE nombre LIKE %s"
             datos = (nombre,)
             cursor.execute(query, datos)
             resultados = cursor.fetchall()
@@ -128,7 +128,7 @@ class buscador:
 
             fecha = campo_buscar.get()
             cursor = self.conexion.cursor()
-            query = "SELECT * FROM practicas WHERE FECHA LIKE %s"
+            query = "SELECT * FROM PracticasGLOBAL_con_estado WHERE fecha LIKE %s"
             datos = (fecha,)
             cursor.execute(query, datos)
             resultados = cursor.fetchall()

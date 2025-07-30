@@ -19,7 +19,7 @@ class alumno():
                     port= 59637,  
                     user="root",
                     password="XTYDQGTzDpJjBcGyChGTybLHiJbfFUac",
-                    database="railway"
+                    database="new_schema"
 
                 )
 
@@ -48,7 +48,7 @@ class alumno():
 
         def datos_empresas():
             cursor = self.conexion.cursor()
-            cursor.execute("SELECT nombre FROM empresas")
+            cursor.execute("SELECT nombre FROM EMPRESAS")
             resultados = [fila[0] for fila in cursor.fetchall()]
             cursor.close()
             return resultados
@@ -87,7 +87,7 @@ class alumno():
        
         def datos_tutores():
             cursor = self.conexion.cursor()
-            cursor.execute("SELECT NOMBRE FROM tutores")
+            cursor.execute("SELECT NOMBRE FROM TUTORES")
             resultados = [fila[0] for fila in cursor.fetchall()]
             cursor.close()
             return resultados
@@ -112,17 +112,37 @@ class alumno():
             try:
 
                 
+                cursor = self.conexion.cursor()
 
-                cursor=self.conexion.cursor()
-                querry="""INSERT INTO practicas(NOMBRE,EMPRESA,FECHA,HORAS,DESCRIPCION,TUTOR)
-                    VALUES (%s, %s, %s, %s, %s, %s)
-                """
+                # Obtener ID de empresa
+                cursor.execute("SELECT id_empresa FROM EMPRESAS WHERE nombre = %s", (empresa,))
+                id_empresa = cursor.fetchone()
+                if not id_empresa:
+                    raise ValueError("Empresa no encontrada")
+                id_empresa = id_empresa[0]
 
-                datos=(nombre,empresa,fecha,hora,descrip,tutor)
-                cursor.execute(querry,datos)
+                # Obtener ID del tutor
+                cursor.execute("SELECT id_tutor FROM TUTORES WHERE nombre = %s", (tutor,))
+                id_tutor = cursor.fetchone()
+                if not id_tutor:
+                    raise ValueError("Tutor no encontrado")
+                id_tutor = id_tutor[0]
+
+                # Obtener ID del estudiante
+                cursor.execute("SELECT id_estudiante FROM ESTUDIANTES WHERE nombre = %s", (nombre,))
+                id_estudiante = cursor.fetchone()
+                if not id_estudiante:
+                    raise ValueError("Estudiante no encontrado")
+                id_estudiante = id_estudiante[0]
+
+                query = """
+                            INSERT INTO PRACTICAS (id_estudiante, id_empresa, fecha, horas, descripcion, id_tutor)
+                            VALUES (%s, %s, %s, %s, %s, %s)
+                            """
+
+                datos = (id_estudiante, id_empresa, fecha, hora, descrip, id_tutor)
+                cursor.execute(query, datos)
                 self.conexion.commit()
-
-                messagebox.showinfo("exito","Datos subidos correctamente")
 
 
             except msqlc.Error as e :

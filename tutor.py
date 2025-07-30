@@ -2,6 +2,7 @@ import tkinter as tk
 import  mysql.connector as msqlc
 from tkinter import ttk
 from buscador import buscador
+from reporte import reportes as reporteS
 
 
 
@@ -20,7 +21,7 @@ class tutor:
                     port= 59637,  
                     user="root",
                     password="XTYDQGTzDpJjBcGyChGTybLHiJbfFUac",
-                    database="railway"
+                    database="new_schema"
 
                 )
 
@@ -35,7 +36,7 @@ class tutor:
             try:  
 
                 cursor=self.conexion.cursor()
-                cursor.execute("SELECT*FROM PracticasAprobadas")
+                cursor.execute("SELECT*FROM Practicasaprobadas")
                 datos=cursor.fetchall()
                 
                 for fila in datos:
@@ -52,7 +53,7 @@ class tutor:
             try:  
 
                 cursor=self.conexion.cursor()
-                cursor.execute("SELECT*FROM PracticasPendientes")
+                cursor.execute("SELECT*FROM Practicaspendientes")
                 datos=cursor.fetchall()
                 
                 for fila in datos:
@@ -68,7 +69,7 @@ class tutor:
             if entradai:
                 try:
                     cursor = self.conexion.cursor()
-                    querry="UPDATE practicas SET ESTADO=1 WHERE idpracticas=%s"
+                    querry="UPDATE PRACTICAS SET ESTADO=1 WHERE id_practica=%s"
                     datos=(entradai,)
                     cursor.execute(querry, datos)
                     self.conexion.commit()
@@ -134,7 +135,8 @@ class tutor:
         boton_buscar_por_fecha = tk.Button(self.ventana, text="BUSCAR POR FECHA", command=lambda: buscador(self.ventana).buscar_fecha())
         boton_buscar_por_fecha.pack(side=tk.BOTTOM, anchor=tk.W)
 
-       
+        boton_generar_reporte = tk.Button(self.ventana, text="GENERAR REPORTE", command=lambda: reporteS(self.ventana).generar_reporte())
+        boton_generar_reporte.pack(side=tk.BOTTOM, anchor=tk.W)
 
 
        #boton para volver
