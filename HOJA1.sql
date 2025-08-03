@@ -30,23 +30,27 @@ CREATE TABLE `EMPRESAS` (
    `tipo` varchar(45) DEFAULT NULL,
    `descripcion` varchar(45) DEFAULT NULL,
    PRIMARY KEY (`id_empresa`)
- ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+ ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
  
  CREATE TABLE `TUTORES` (
    `id_tutor` int NOT NULL AUTO_INCREMENT,
    `nombre` varchar(45) DEFAULT NULL,
+   `apellido` varchar(45) DEFAULT NULL,
    `correo` varchar(45) DEFAULT NULL,
    `telefono` varchar(45) DEFAULT NULL,
-   PRIMARY KEY (`id_tutor`)
- ) ENGINE=InnoDB AUTO_INCREMENT=209 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
- 
+   `cedula` varchar(45) DEFAULT NULL,
+   PRIMARY KEY (`id_tutor`),
+   UNIQUE KEY `cedula_UNIQUE` (`cedula`)
+ ) ENGINE=InnoDB AUTO_INCREMENT=216 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+
  
  CREATE TABLE `ESTUDIANTES` (
    `id_estudiante` int NOT NULL AUTO_INCREMENT,
    `nombre` varchar(45) DEFAULT NULL,
+   `apellido` varchar(45) DEFAULT NULL,
    `carrera` varchar(45) DEFAULT NULL,
    `nacimiento` date DEFAULT NULL,
-   `horastotales` int DEFAULT '0',
+   `cedula` varchar(10) NOT NULL,
    PRIMARY KEY (`id_estudiante`)
  ) ENGINE=InnoDB AUTO_INCREMENT=106 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
  
@@ -59,8 +63,6 @@ CREATE TABLE `EMPRESAS` (
    `descripcion` varchar(100) DEFAULT NULL,
    `id_tutor` int DEFAULT NULL,
    `estado` tinyint DEFAULT '0',
-   
-   
    PRIMARY KEY (`id_practica`),
    KEY `id_empresa` (`id_empresa`),
    KEY `id_estudiante` (`id_estudiante`),
@@ -68,4 +70,34 @@ CREATE TABLE `EMPRESAS` (
    CONSTRAINT `PRACTICAS_ibfk_1` FOREIGN KEY (`id_empresa`) REFERENCES `EMPRESAS` (`id_empresa`),
    CONSTRAINT `PRACTICAS_ibfk_2` FOREIGN KEY (`id_estudiante`) REFERENCES `ESTUDIANTES` (`id_estudiante`),
    CONSTRAINT `PRACTICAS_ibfk_3` FOREIGN KEY (`id_tutor`) REFERENCES `TUTORES` (`id_tutor`)
- ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+ ) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+ 
+ 
+  INSERT INTO TUTORES (id_tutor, nombre, apellido, correo, telefono, cedula) VALUES
+(1, 'Carlos', 'Mendoza', 'cmendoza@uleam.edu.ec', '0991234567', '1304567890'),
+(2, 'Lucía', 'Paredes', 'lparedes@uleam.edu.ec', '0987654321', '1309876543'),
+(3, 'Jorge', 'Ramírez', 'jramirez@uleam.edu.ec', '0971122334', '1312345678');
+
+
+INSERT INTO ESTUDIANTES (id_estudiante, nombre, apellido, carrera, nacimiento, cedula) VALUES
+(1, 'Ana', 'Torres', 'Ingeniería de Software', '2002-05-14', '1301122334'),
+(2, 'Luis', 'Gómez', 'Sistemas', '2001-08-22', '1302233445'),
+(3, 'María', 'López', 'Telecomunicaciones', '2003-01-10', '1303344556'),
+(4, 'Pedro', 'Martínez', 'Ingeniería de Software', '2002-11-30', '1304455667');
+
+
+INSERT INTO PRACTICAS (id_practica, id_estudiante, id_empresa, horas, fecha, descripcion, id_tutor, estado) VALUES
+(1, 1, 1, 120, '2025-06-01', 'Desarrollo de una app móvil', 1, 1),
+(2, 2, 2, 100, '2025-06-15', 'Análisis de impacto ambiental', 2, 1),
+(3, 3, 3, 80, '2025-07-01', 'Automatización de reportes financieros', 3, 0),
+(4, 4, 1, 150, '2025-07-10', 'Refactorización de sistema web', 1, 1);
+
+
+SELECT * FROM TUTORES;
+SELECT * FROM ESTUDIANTES;
+SELECT * FROM EMPRESAS;
+SELECT*FROM PRACTICAS
+
+
+
+
