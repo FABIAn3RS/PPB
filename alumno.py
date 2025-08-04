@@ -17,21 +17,21 @@ class alumno():
 
                     host="maglev.proxy.rlwy.net",
                     port= 59637,  
-                    user="root",
-                    password="XTYDQGTzDpJjBcGyChGTybLHiJbfFUac",
+                    user="usuario_app",
+                    password="123",
                     database="new_schema"
 
                 )
 
     def campos(self):
 
-        #campo nombre
+        #campo cedula
 
-        etiqueta_nombre=tk.Label(self.ventana,text="NOMBRES")
-        etiqueta_nombre.pack()
+        etiqueta_cedula=tk.Label(self.ventana,text="cedula")
+        etiqueta_cedula.pack()
 
-        campo_nombre=tk.Entry(self.ventana)
-        campo_nombre.pack()
+        campo_cedula=tk.Entry(self.ventana)
+        campo_cedula.pack()
 
         #campo fecha
 
@@ -87,7 +87,7 @@ class alumno():
        
         def datos_tutores():
             cursor = self.conexion.cursor()
-            cursor.execute("SELECT NOMBRE FROM TUTORES")
+            cursor.execute("SELECT nombre_tutor FROM  Nombres_tutores")
             resultados = [fila[0] for fila in cursor.fetchall()]
             cursor.close()
             return resultados
@@ -102,7 +102,7 @@ class alumno():
         #boton
 
         def mandar():
-            nombre=campo_nombre.get()
+            cedula=campo_cedula.get()
             fecha=campo_fecha.get()
             empresa=combo_empresas.get()
             hora=campo_horas.get()
@@ -118,21 +118,21 @@ class alumno():
                 cursor.execute("SELECT id_empresa FROM EMPRESAS WHERE nombre = %s", (empresa,))
                 id_empresa = cursor.fetchone()
                 if not id_empresa:
-                    raise ValueError("Empresa no encontrada")
+                    raise messagebox.showerror('error','Empresa no encontrada')
                 id_empresa = id_empresa[0]
 
                 # Obtener ID del tutor
-                cursor.execute("SELECT id_tutor FROM TUTORES WHERE nombre = %s", (tutor,))
+                cursor.execute("SELECT id_tutor FROM  Nombres_tutores WHERE nombre_tutor = %s", (tutor,))
                 id_tutor = cursor.fetchone()
                 if not id_tutor:
-                    raise ValueError("Tutor no encontrado")
+                    raise messagebox.showerror('error',"Tutor no encontrado")
                 id_tutor = id_tutor[0]
 
                 # Obtener ID del estudiante
-                cursor.execute("SELECT id_estudiante FROM ESTUDIANTES WHERE nombre = %s", (nombre,))
+                cursor.execute("SELECT id_estudiante FROM ESTUDIANTES WHERE cedula = %s", (cedula,))
                 id_estudiante = cursor.fetchone()
                 if not id_estudiante:
-                    raise ValueError("Estudiante no encontrado")
+                    raise messagebox.showerror('error',"estudiante no encontrado")
                 id_estudiante = id_estudiante[0]
 
                 query = """

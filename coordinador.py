@@ -3,6 +3,7 @@ import  mysql.connector as msqlc
 from tkinter import ttk
 from buscador import buscador
 from reporte import reportes
+from tkinter import messagebox
 
 class cordinador:
      def __init__(self,vent):
@@ -13,10 +14,10 @@ class cordinador:
         self.vent=vent
         self.conexion=msqlc.connect(
 
-                    host="maglev.proxy.rlwy.net",
+                   host="maglev.proxy.rlwy.net",
                     port= 59637,  
-                    user="root",
-                    password="XTYDQGTzDpJjBcGyChGTybLHiJbfFUac",
+                    user="coordinador",
+                    password="coordinador",
                     database="new_schema"
 
                 )
@@ -101,13 +102,43 @@ class cordinador:
                 boton_guardar.pack()
 
 
+            def eliminar_empresa():
+                empresa_inerfaz = tk.Toplevel(self.ventana)
+                empresa_inerfaz.geometry("300x200")
+                empresa_inerfaz.title("Eliminar Empresa")
+
+                etiqueta_id = tk.Label(empresa_inerfaz, text="ID de la Empresa a Eliminar:")
+                etiqueta_id.pack()
+
+                campo_id = tk.Entry(empresa_inerfaz)
+                campo_id.pack()
+
+                def eliminar():
+                    id_empresa = campo_id.get()
+                    try:
+                        cursor = self.conexion.cursor()
+                        querry = "DELETE FROM EMPRESAS WHERE id_empresa = %s"
+                        datos = (id_empresa,)
+                        cursor.execute(querry, datos)
+                        self.conexion.commit()
+                        empresa_inerfaz.destroy()
+                        cargar_Datos_empresas()
+                        messagebox.showinfo("Éxito", "Empresa eliminada correctamente.")
+                    except msqlc.Error as e:
+                        messagebox.showerror("Error", f"Error al eliminar la empresa: {e}")
+
+                boton_eliminar = tk.Button(empresa_inerfaz, text="Eliminar", command=eliminar)
+                boton_eliminar.pack()
+
+            #FUNCION PARA CARGAR DATOS DE TUTORES
+
             def cargar_datos_tutores():
 
                 tree_tutores.delete(*tree_tutores.get_children())
 
 
                 cursor = self.conexion.cursor()
-                cursor.execute("SELECT * FROM TUTORES")
+                cursor.execute("SELECT * FROM Nombres_tutores")
                 datos = cursor.fetchall()
                 for fila in datos:
                     tree_tutores.insert("", tk.END, values=fila)
@@ -127,6 +158,12 @@ class cordinador:
                 campo_nombre = tk.Entry(tutor_inerfaz)
                 campo_nombre.pack()
 
+                etiqueta_apellido = tk.Label(tutor_inerfaz, text="Apellido del Tutor:")
+                etiqueta_apellido.pack()
+
+                campo_apellido = tk.Entry(tutor_inerfaz)
+                campo_apellido.pack()
+
                 etiqueta_correo = tk.Label(tutor_inerfaz, text="Correo del Tutor:")
                 etiqueta_correo.pack()
 
@@ -139,27 +176,62 @@ class cordinador:
                 campo_telefono = tk.Entry(tutor_inerfaz)
                 campo_telefono.pack()
 
+                etiqueta_cedula = tk.Label(tutor_inerfaz, text="Cédula del Tutor:")
+                etiqueta_cedula.pack()
+
+                campo_cedula = tk.Entry(tutor_inerfaz)
+                campo_cedula.pack()
+
                 def guardar_tutor():
                     nombre = campo_nombre.get()
+                    apellido = campo_apellido.get()
                     correo = campo_correo.get()
                     telefono = campo_telefono.get()
+                    cedula = campo_cedula.get()
 
                     try:
                         cursor = self.conexion.cursor()
-                        querry = """INSERT INTO TUTORES(nombre, correo, telefono)
-                                    VALUES (%s, %s, %s)"""
-                        datos = (nombre, correo, telefono)
+                        querry = """INSERT INTO TUTORES(nombre, apellido, correo, telefono, cedula)
+                                    VALUES (%s, %s, %s, %s, %s)"""
+                        datos = (nombre, apellido, correo, telefono, cedula)
                         cursor.execute(querry, datos)
                         self.conexion.commit()
                         tutor_inerfaz.destroy()
                         cargar_datos_tutores()
-                        print("Tutor agregado correctamente.")
+                        messagebox.showinfo("Éxito", "Tutor agregado correctamente.")
                     except msqlc.Error as e:
-                        print(f"Error al agregar el tutor: {e}")
+                        messagebox.showerror("Error", f"Error al agregar el tutor: {e}")
 
                 boton_guardar = tk.Button(tutor_inerfaz, text="Guardar", command=guardar_tutor)
                 boton_guardar.pack()
 
+            def eliminar_tutor():
+                tutor_inerfaz = tk.Toplevel(self.ventana)
+                tutor_inerfaz.geometry("300x200")
+                tutor_inerfaz.title("Eliminar Tutor")
+
+                etiqueta_id = tk.Label(tutor_inerfaz, text="cedula del Tutor a Eliminar:")
+                etiqueta_id.pack()
+
+                campo_id = tk.Entry(tutor_inerfaz)
+                campo_id.pack()
+
+                def eliminar():
+                    id_tutor = campo_id.get()
+                    try:
+                        cursor = self.conexion.cursor()
+                        querry = "DELETE FROM TUTORES WHERE cedula = %s"
+                        datos = (id_tutor,)
+                        cursor.execute(querry, datos)
+                        self.conexion.commit()
+                        tutor_inerfaz.destroy()
+                        cargar_datos_tutores()
+                        messagebox.showinfo("Éxito", "Tutor eliminado correctamente.")
+                    except msqlc.Error as e:
+                        messagebox.showerror("Error", f"Error al eliminar el tutor: {e}")
+
+                boton_eliminar = tk.Button(tutor_inerfaz, text="Eliminar", command=eliminar)
+                boton_eliminar.pack()
 
             def cargar_datos_estudiantes():
 
@@ -168,7 +240,7 @@ class cordinador:
 
 
                 cursor = self.conexion.cursor()
-                cursor.execute("SELECT * FROM ESTUDIANTES")
+                cursor.execute("SELECT * FROM Nombres_estudiantes")
                 datos = cursor.fetchall()
                 for fila in datos:
                     tree_estudiantes.insert("", tk.END, values=fila)
@@ -186,9 +258,16 @@ class cordinador:
 
                 campo_nombre = tk.Entry(estudiante_inerfaz)
                 campo_nombre.pack()
+                
 
-                etiqueta_correo = tk.Label(estudiante_inerfaz, text="Correo del Estudiante:")
-                etiqueta_correo.pack()
+                etiqueta_apellido = tk.Label(estudiante_inerfaz, text="Apellido del Estudiante:")
+                etiqueta_apellido.pack()
+
+                campo_apellido = tk.Entry(estudiante_inerfaz)
+                campo_apellido.pack()
+
+                etiqueta_carrera = tk.Label(estudiante_inerfaz, text="Carrera del Estudiante:")
+                etiqueta_carrera.pack()
 
                 campo_carrera = tk.Entry(estudiante_inerfaz)
                 campo_carrera.pack()
@@ -199,28 +278,65 @@ class cordinador:
                 campo_nacimiento = tk.Entry(estudiante_inerfaz)
                 campo_nacimiento.pack()
 
+                etiqueta_cedula = tk.Label(estudiante_inerfaz, text="Cédula del Estudiante:")
+                etiqueta_cedula.pack()
+
+                campo_cedula = tk.Entry(estudiante_inerfaz)
+                campo_cedula.pack()
+
+
+
                 def guardar_estudiante():
                     nombre = campo_nombre.get()
+                    apellido = campo_apellido.get()
                     carrera = campo_carrera .get()
                     nacimiento = campo_nacimiento.get()
+                    cedula = campo_cedula.get()
 
                     try:
                         cursor = self.conexion.cursor()
-                        querry = """INSERT INTO ESTUDIANTES(nombre, carrera, nacimiento)
-                                    VALUES (%s, %s, %s)"""
-                        datos = (nombre, carrera, nacimiento)
+                        querry = """INSERT INTO ESTUDIANTES(nombre, apellido, carrera, nacimiento, cedula)
+                                    VALUES (%s, %s, %s, %s, %s)"""
+                        datos = (nombre, apellido, carrera, nacimiento, cedula)
                         cursor.execute(querry, datos)
                         self.conexion.commit()
                         estudiante_inerfaz.destroy()
                         cargar_datos_estudiantes()
-                        print("Estudiante agregado correctamente.")
+                        messagebox.showinfo("Éxito", "Estudiante agregado correctamente.")
                     except msqlc.Error as e:
-                        print(f"Error al agregar el estudiante: {e}")
+                        messagebox.showerror("Error", f"Error al agregar el estudiante: {e}")
 
                 boton_guardar = tk.Button(estudiante_inerfaz, text="Guardar", command=guardar_estudiante)
                 boton_guardar.pack()
 
-           
+            def eliminar_estudiante():
+                estudiante_inerfaz = tk.Toplevel(self.ventana)
+                estudiante_inerfaz.geometry("300x200")
+                estudiante_inerfaz.title("Eliminar Estudiante")
+
+                etiqueta_id = tk.Label(estudiante_inerfaz, text="Cédula del Estudiante a Eliminar:")
+                etiqueta_id.pack()
+
+                campo_id = tk.Entry(estudiante_inerfaz)
+                campo_id.pack()
+
+                def eliminar():
+                    id_estudiante = campo_id.get()
+                    try:
+                        cursor = self.conexion.cursor()
+                        querry = "DELETE FROM ESTUDIANTES WHERE cedula = %s"
+                        datos = (id_estudiante,)
+                        cursor.execute(querry, datos)
+                        self.conexion.commit()
+                        estudiante_inerfaz.destroy()
+                        cargar_datos_estudiantes()
+                        messagebox.showinfo("Éxito", "Estudiante eliminado correctamente.")
+                    except msqlc.Error as e:
+                        messagebox.showerror("Error", f"Error al eliminar el estudiante: {e}")
+
+                boton_eliminar = tk.Button(estudiante_inerfaz, text="Eliminar", command=eliminar)
+                boton_eliminar.pack()
+
            #eTIQUETA EMPRESAS
 
             etiqueta_nombre=tk.Label(self.ventana,text="EMPRESAS")
@@ -240,7 +356,10 @@ class cordinador:
             boton_agregar_empresa = tk.Button(self.ventana, text="AGREGAR EMPRESA", command=agregar_empresa)
             boton_agregar_empresa.pack()
 
-
+            #boton para eliminar empresa
+            
+            boton_eliminar_empresa = tk.Button(self.ventana, text="ELIMINAR EMPRESA", command=eliminar_empresa)
+            boton_eliminar_empresa.pack()
 
             
 
@@ -249,7 +368,7 @@ class cordinador:
             etiqueta_tutores.pack()
 
             #TABLA TUTORES
-            columnas_tutores = ("ID", "Nombre", "Correo", "Telefono")
+            columnas_tutores = ("ID", "Nombres", "Correo", "Telefono", "Cedula")
             tree_tutores = ttk.Treeview(self.ventana, columns=columnas_tutores, show="headings")
             for col in columnas_tutores:
                 tree_tutores.heading(col, text=col)
@@ -260,8 +379,9 @@ class cordinador:
             boton_agregar_tutor = tk.Button(self.ventana, text="AGREGAR TUTOR", command=agregar_tutor)
             boton_agregar_tutor.pack()
 
-
-
+            # BOTON PARA ELIMINAR TUTORES
+            boton_eliminar_tutor = tk.Button(self.ventana, text="ELIMINAR TUTOR", command=eliminar_tutor)
+            boton_eliminar_tutor.pack()
 
 
 
@@ -271,7 +391,7 @@ class cordinador:
             etiqueta_estudiantes.pack()
 
             #TABLA ESTUDIANTES
-            columnas_estudiantes = ("ID", "Nombre", "Correo", "Nacimiento")
+            columnas_estudiantes = ("ID", "Nombre", "Carrera", "Nacimiento", "Cedula")
             tree_estudiantes = ttk.Treeview(self.ventana, columns=columnas_estudiantes, show="headings")
             for col in columnas_estudiantes:
                 tree_estudiantes.heading(col, text=col)
@@ -282,9 +402,14 @@ class cordinador:
             boton_agregar_estudiante = tk.Button(self.ventana, text="AGREGAR ESTUDIANTE", command=agregar_estudiante)
             boton_agregar_estudiante.pack()
 
+
+            # BOTON PARA ELIMINAR ESTUDIANTES
+            boton_eliminar_estudiante = tk.Button(self.ventana, text="ELIMINAR ESTUDIANTE", command=eliminar_estudiante)
+            boton_eliminar_estudiante.pack()    
+
             #BOTON PARA BUSQUEDA DE PRACTICAS
 
-
+         
             boton_buscar_por_empresa = tk.Button(self.ventana, text="BUSCAR POR EMPRESA", command=lambda: buscador(self.ventana).buscar_empresa())
             boton_buscar_por_empresa.pack(side=tk.BOTTOM, anchor=tk.W)
 
@@ -294,8 +419,12 @@ class cordinador:
             boton_buscar_por_fecha = tk.Button(self.ventana, text="BUSCAR POR FECHA", command=lambda: buscador(self.ventana).buscar_fecha())
             boton_buscar_por_fecha.pack(side=tk.BOTTOM, anchor=tk.W)
 
+            boton_buscar_por_estudiante = tk.Button(self.ventana, text="BUSCAR   ESTUDIANTE", command=lambda: buscador(self.ventana).buscar_estudiante_por_cedula())
+            boton_buscar_por_estudiante.pack(side=tk.BOTTOM, anchor=tk.E)
+
+
             boton_generar_reporte = tk.Button(self.ventana, text="GENERAR REPORTE", command=lambda: reportes(self.ventana).generar_reporte())
-            boton_generar_reporte.pack(side=tk.BOTTOM, anchor=tk.W)
+            boton_generar_reporte.pack(side=tk.BOTTOM, anchor=tk.E)
 
 
 

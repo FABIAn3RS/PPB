@@ -1,8 +1,0 @@
-user1:contra1
-us2:contra2
-menestra:pollo
-Julio:contra4
-Alan:contra5
-ada:ada
-LOL 100:RESET 100
-FULANO:123

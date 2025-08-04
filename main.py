@@ -17,7 +17,7 @@ class login:
 
     def botones(self):
 
-        imagen = Image.open("fondos.jpg")  # Puedes usar .png también
+        imagen = Image.open("fondo.jpg.jpg")  # Puedes usar .png también
 
         # Redimensionar si es necesario
         imagen = imagen.resize((900, 950))

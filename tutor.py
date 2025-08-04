@@ -19,8 +19,8 @@ class tutor:
 
                     host="maglev.proxy.rlwy.net",
                     port= 59637,  
-                    user="root",
-                    password="XTYDQGTzDpJjBcGyChGTybLHiJbfFUac",
+                    user="usuario_app",
+                    password="123",
                     database="new_schema"
 
                 )
@@ -36,7 +36,7 @@ class tutor:
             try:  
 
                 cursor=self.conexion.cursor()
-                cursor.execute("SELECT*FROM Practicasaprobadas")
+                cursor.execute("SELECT id_practica, nombres_estudiante,cedula,empresa,horas,fecha,descripcion,nombres_tutor FROM PracticasGLOBAL_con_estado WHERE estado=1")
                 datos=cursor.fetchall()
                 
                 for fila in datos:
@@ -53,7 +53,7 @@ class tutor:
             try:  
 
                 cursor=self.conexion.cursor()
-                cursor.execute("SELECT*FROM Practicaspendientes")
+                cursor.execute("SELECT id_practica, nombres_estudiante,cedula,empresa,horas,fecha,descripcion,nombres_tutor FROM PracticasGLOBAL_con_estado WHERE estado=0")
                 datos=cursor.fetchall()
                 
                 for fila in datos:
@@ -99,7 +99,7 @@ class tutor:
         etiqueta_tabla.pack()
 
 
-        columnas = ("ID", "Nombre", "Empresa", "Horas", "Feha", "Descripción", "Tutor")
+        columnas = ("ID", "Nombre","Cedula", "Empresa", "Horas", "Feha", "Descripción", "Tutor")
         tree = ttk.Treeview(self.ventana, columns=columnas, show="headings")
         for col in columnas:
             tree.heading(col, text=col)
@@ -111,7 +111,7 @@ class tutor:
         etiqueta_tabla2=tk.Label(self.ventana,text="Practicas Pendientes")
         etiqueta_tabla2.pack()
 
-        columnas2 = ("ID", "Nombre", "Empresa", "Horas", "Feha", "Descripción", "Tutor")
+        columnas2 = ("ID", "Nombre", "Cedula", "Empresa", "Horas", "Feha", "Descripción", "Tutor")
         tree2 = ttk.Treeview(self.ventana, columns=columnas2, show="headings")
         for col in columnas2:
             tree2.heading(col, text=col)
@@ -123,20 +123,25 @@ class tutor:
         etiqueta_aprobar_practica.pack()
         entrada_id.pack()
 
+        
+
         boton_aprobar=tk.Button(self.ventana,text="Aprobar Practica",command=aprobar_practica_y_actualizar)
         boton_aprobar.pack()
 
         boton_buscar_por_empresa = tk.Button(self.ventana, text="BUSCAR POR EMPRESA", command=lambda: buscador(self.ventana).buscar_empresa())
-        boton_buscar_por_empresa.pack(side=tk.BOTTOM, anchor=tk.W)
+        boton_buscar_por_empresa.pack(side=tk.BOTTOM, anchor=tk.NW)
 
         boton_buscar_por_estudiante = tk.Button(self.ventana, text="BUSCAR POR ESTUDIANTE", command=lambda: buscador(self.ventana).buscar_estudiante())
-        boton_buscar_por_estudiante.pack(side=tk.BOTTOM, anchor=tk.W)
+        boton_buscar_por_estudiante.pack(side=tk.BOTTOM, anchor=tk.NW)
 
         boton_buscar_por_fecha = tk.Button(self.ventana, text="BUSCAR POR FECHA", command=lambda: buscador(self.ventana).buscar_fecha())
-        boton_buscar_por_fecha.pack(side=tk.BOTTOM, anchor=tk.W)
+        boton_buscar_por_fecha.pack(side=tk.BOTTOM, anchor=tk.NW)
+
+        boton_buscar_estudiante= tk.Button(self.ventana, text="BUSCAR  POR ESTUDIANTE", command=lambda: buscador(self.ventana).buscar_estudiante_por_cedula())
+        boton_buscar_estudiante.pack(side=tk.BOTTOM, anchor=tk.SE)
 
         boton_generar_reporte = tk.Button(self.ventana, text="GENERAR REPORTE", command=lambda: reporteS(self.ventana).generar_reporte())
-        boton_generar_reporte.pack(side=tk.BOTTOM, anchor=tk.W)
+        boton_generar_reporte.pack(side=tk.BOTTOM, anchor=tk.SE)
 
 
        #boton para volver

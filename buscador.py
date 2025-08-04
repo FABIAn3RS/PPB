@@ -2,7 +2,6 @@ import tkinter as tk
 import mysql.connector as msqlc
 from tkinter import ttk
 
-from sklearn import tree
 
 class buscador:
     def __init__(self, vent):
@@ -13,8 +12,8 @@ class buscador:
         self.conexion = msqlc.connect(
             host="maglev.proxy.rlwy.net",
             port=59637,
-            user="root",
-            password="XTYDQGTzDpJjBcGyChGTybLHiJbfFUac",
+            user="usuario_app",
+            password="123",
             database="new_schema"
         )
 
@@ -49,7 +48,7 @@ class buscador:
         boton_buscar = tk.Button(self.ventana, text="Buscar", command=buscar_por_empresas)
         boton_buscar.pack()
 
-        columnas = ("ID", "Nombre", "Empresa", "Horas", "Fecha", "Descripción", "Estado", "Tutor")
+        columnas = ("ID", "Nombre", "Cedula", "Empresa", "Horas", "Fecha", "Descripción", "Estado", "Tutor")
         tree_empresas = ttk.Treeview(self.ventana, columns=columnas, show="headings")
         for col in columnas:
             tree_empresas.heading(col, text=col)
@@ -81,7 +80,7 @@ class buscador:
 
             nombre = campo_buscar.get()
             cursor = self.conexion.cursor()
-            query = "SELECT * FROM PracticasGLOBAL_con_estado WHERE nombre LIKE %s"
+            query = "SELECT * FROM PracticasGLOBAL_con_estado WHERE nombres_estudiante LIKE %s"
             datos = (nombre,)
             cursor.execute(query, datos)
             resultados = cursor.fetchall()
@@ -97,7 +96,7 @@ class buscador:
         boton_buscar = tk.Button(self.ventana, text="Buscar", command=buscar_por_estudiantes)
         boton_buscar.pack()
 
-        columnas = ("ID", "Nombre", "Empresa", "Horas", "Fecha", "Descripción", "Estado", "Tutor")
+        columnas = ("ID", "Nombre", "Cedula", "Empresa", "Horas", "Fecha", "Descripción", "Estado", "Tutor")
         tree_estudiantes = ttk.Treeview(self.ventana, columns=columnas, show="headings")
         for col in columnas:
             tree_estudiantes.heading(col, text=col)
@@ -142,11 +141,53 @@ class buscador:
         boton_buscar = tk.Button(self.ventana, text="Buscar", command=buscar_por_fecha)
         boton_buscar.pack()
 
-        columnas = ("ID", "Nombre", "Empresa", "Horas", "Fecha", "Descripción", "Estado", "Tutor")
+        columnas = ("ID", "Nombre", "Cedula", "Empresa", "Horas", "Fecha", "Descripción", "Estado", "Tutor")
         tree_fecha = ttk.Treeview(self.ventana, columns=columnas, show="headings")
         for col in columnas:
             tree_fecha.heading(col, text=col)
         tree_fecha.pack()
+
+        def volver():
+            self.conexion.close()
+            self.vent.deiconify()
+            self.ventana.destroy()
+
+        volverb = tk.Button(self.ventana, text="volver", command=volver)
+        volverb.pack()
+
+    def buscar_estudiante_por_cedula(self):
+
+        etiqueta_buscar = tk.Label(self.ventana, text="Buscar estudiantes por Cedula")
+        etiqueta_buscar.pack()
+
+        campo_buscar = tk.Entry(self.ventana)
+        campo_buscar.pack()
+
+        def buscar_por_cedula():
+
+            for item in tree_cedula.get_children():
+                tree_cedula.delete(item)
+
+            cedula = campo_buscar.get()
+            cursor = self.conexion.cursor()
+            query = "SELECT * FROM Nombres_estudiantes WHERE cedula LIKE %s"
+            datos = (cedula,)
+            cursor.execute(query, datos)
+            resultados = cursor.fetchall()
+            print(resultados)
+            cursor.close()
+
+            for fila in resultados:
+                tree_cedula.insert("", tk.END, values=fila)
+
+        boton_buscar = tk.Button(self.ventana, text="Buscar", command=buscar_por_cedula)
+        boton_buscar.pack()
+
+        columnas = ("ID", "Nombre", "Carrera", "Nacimimiento", "Cedula")
+        tree_cedula = ttk.Treeview(self.ventana, columns=columnas, show="headings")
+        for col in columnas:
+            tree_cedula.heading(col, text=col)
+        tree_cedula.pack()
 
         def volver():
             self.conexion.close()
