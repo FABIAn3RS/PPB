@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="estiloform.css">
+
+</head>
+
+<body>
+
+    <header>
+        <h1>Inscripciones para equipo de Clash of Clans</h1>
+        <img src="Bárbaro_info.webp" alt="imagen1">
+
+
+
+    </header>
+
+
+    <main>
+
+
+
+
+        <div id="formulario">
+            <form action="" onsubmit="return validarFormulario()">
+
+                <p>Ingrese nombre</p>
+                <input id="name_control" type="text" name="name_control" autofocus required />
+                <p>Ingrese apellido</p>
+                <input id="last_control" type="text" name="last_control" required />
+                <p>Ingrese correo electrónico</p>
+                <input id="email_control" type="email" name="email_control" required />
+                <p>Ingrese cedula</p>
+                <input id="cedula_control" type="text" name="cedula_control" maxlength="10" minlength="10" required />
+                <p>Ingrese contraseña</p>
+                <input id="password_control" type="password" name="password_control" required />
+                <p>Ingrese fecha de nacimiento</p>
+                <input id="birthdate_control" type="date" name="birthdate_control" required>
+                <p>Ingrese número de teléfono</p>
+                <input id="tel_control" type="tel" name="tel_control" required />
+                <p>Ingrese dirección</p>
+                <input id="address_control" type="text" name="address_control" required />
+
+                <br>
+                <br>
+
+
+                <button id="enviar" type="submit">Enviar</button>
+
+
+
+
+            </form>
+        </div>
+
+    </main>
+
+    <footer>
+        <p>Derechos reservados Virus Corp</p>
+        <p>Contacto: info@viruscorp.com</p>
+        <p>Teléfono: +123 456 7890</p>
+        <p>Dirección: Calle Falsa 123, Ciudad, País</p>
+
+
+
+    </footer>
+</body>
+
+
+
+
+<script src="validacion.js"> </script>
+
+</html>

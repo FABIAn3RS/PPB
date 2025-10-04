@@ -1,0 +1,68 @@
+/* Fondo suave y fuente legible */
+body {
+    background-color: #f4f8fb;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+/* Encabezado centrado y destacado */
+header {
+    background-color: #e0f7fa;
+    padding: 20px 0;
+    text-align: center;
+    border-bottom: 2px solid #b2ebf2;
+}
+
+/* Imagen de perfil redonda */
+#perfil {
+    border-radius: 50%;
+    border: 2px solid #b2ebf2;
+}
+
+/* Secciones principales con espacio */
+main>div {
+    background: #fff;
+    margin: 20px auto;
+    padding: 20px;
+    max-width: 700px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* Títulos de sección */
+h2 {
+    color: #0097a7;
+    border-bottom: 1px solid #ee0000;
+    padding-bottom: 5px;
+}
+
+/* Listas */
+ul {
+    padding-left: 20px;
+}
+
+/* Tabla con líneas visibles */
+table,
+th,
+td {
+    border: 1px solid #0097a7;
+    border-collapse: collapse;
+}
+
+th,
+td {
+    padding: 8px 12px;
+    text-align: left;
+}
+
+/* Pie de página sencillo */
+footer {
+    background-color: #e0f7fa;
+    text-align: center;
+    padding: 15px 0;
+    margin-top: 30px;
+    border-top: 2px solid #b2ebf2;
+    color: #555;
+}
